@@ -1,0 +1,42 @@
+# Doxygen GitHub Pages Deploy Action
+name: 'publish'
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+      with:
+        submodules: "true"
+
+    - name: Update repository indexes (Universe)
+      run: sudo apt-get update
+      shell: bash
+
+    - name: Install Doxygen
+      run: sudo apt-get install doxygen -y
+      shell: bash
+
+    - name: Generate Doxygen Documentation
+      run: doxygen
+      shell: bash
+      
+    - name: Create .nojekyll (ensures pages with underscores work on gh pages)
+      run: touch docs/.nojekyll
+      shell: bash
+
+    - name: Deploy to GitHub Pages
+      uses: JamesIves/github-pages-deploy-action@4.1.8
+      with:
+        token: ${{ secrets.DOXYGEN }}
+        branch: gh-pages
+        repository-name: fbrier/Documentation
+        target-folder: Test.Doxygen
+        folder: docs

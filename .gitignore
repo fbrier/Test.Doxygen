@@ -30,3 +30,6 @@
 *.exe
 *.out
 *.app
+/.vs/Test.Doxygen/v16/.suo
+/HelloWord/bin/Debug/netcoreapp3.1
+/HelloWord/obj
